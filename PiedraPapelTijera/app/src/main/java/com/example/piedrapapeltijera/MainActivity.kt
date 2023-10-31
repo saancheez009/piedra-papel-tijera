@@ -52,9 +52,9 @@ class MainActivity : ComponentActivity() {
 }
 
 
-fun play(puntosJugador: Int, puntosMaquina: Int): Boolean {
+fun play(puntuacionJugador: Int, puntuacionMaquina: Int): Boolean {
     var juegan = true
-    if (puntosMaquina >= 3 || puntosJugador >= 3){
+    if (puntuacionMaquina >= 3 || puntuacionJugador >= 3){
         juegan = false
     }
     return juegan
@@ -64,6 +64,8 @@ fun play(puntosJugador: Int, puntosMaquina: Int): Boolean {
 
 @Composable
 fun juego( modifier: Modifier = Modifier) {
+
+    val context= LocalContext.current
 
     var eleccionJugador by remember { //Elección del jugador
         mutableStateOf(R.drawable.interrogacion)
@@ -86,7 +88,7 @@ fun juego( modifier: Modifier = Modifier) {
     }
 
 
-    when (eleccionJugador){
+    when (eleccionMaquina){
         1-> eleccionMaquina = R.drawable.piedra //1 = piedra
         2-> eleccionMaquina = R.drawable.papel //2 = papel
         3-> eleccionMaquina = R.drawable.tijera //3 = tijera
@@ -184,17 +186,19 @@ fun juego( modifier: Modifier = Modifier) {
                         }
                     }
             )
-            Image(painter = painterResource(id = R.drawable.tijera),
+            Image(
+                painter = painterResource(id = R.drawable.tijera),
                 contentDescription = "tijera",
                 modifier = Modifier
                     .weight(1F)
-                    .clickable(enabled = play(puntosJugador,puntosMaquina)) {
+                    .clickable(enabled = play(puntosJugador, puntosMaquina)) {
                         eleccionJugador = 3 //El jugador elige tijera = 3
 
                         eleccionMaquina =
                             random()
                         //Llamada funcion para determinar ganador
                         when (ganador(eleccionJugador, eleccionMaquina)) {
+
                             0 -> Toast
                                 .makeText(context, "Empate", Toast.LENGTH_SHORT)
                                 .show()
@@ -203,31 +207,32 @@ fun juego( modifier: Modifier = Modifier) {
                             2 -> puntosJugador += 1
                         }
                     }
+            )
+                }
 
-                }
         Row (
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier
-                .weight(1f)
-                .fillMaxWidth()
-        ) {
-            //se anuncia quien gana
-                val ganadort = ganadort(puntosJugador, puntosMaquina)
-                //Si no llegan a 3 ptos siguen jugando
-                if (play(puntosJugador, puntosMaquina)) {
-                    Text(
-                        text = "Máquina $puntosMaquina - $puntosJugador Jugador",
-                        fontSize = 30.sp
-                    )
-                } else { //Si uno obtiene 3 ptos acaba el juego
-                    Text(
-                        text = "Máquina $puntosMaquina - $puntosJugador Jugador " + "\n" +
-                                "\n" + "Ha ganado $ganadort",
-                        fontSize = 30.sp
-                    )
-                }
-    }
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            ) {
+                //se anuncia quien gana
+                    val ganadort = ganadort(puntosJugador, puntosMaquina)
+                    //Si no llegan a 3 ptos siguen jugando
+                    if (play(puntosJugador, puntosMaquina)) {
+                        Text(
+                            text = "Máquina $puntosMaquina - $puntosJugador Jugador",
+                            fontSize = 30.sp
+                        )
+                    } else { //Si uno obtiene 3 ptos acaba el juego
+                        Text(
+                            text = "Máquina $puntosMaquina - $puntosJugador Jugador " + "\n" +
+                                    "\n" + "El ganador es  $ganadort",
+                            fontSize = 30.sp
+                        )
+                    }
+        }
     }
 }
 //Números aleatorios para la elección de maquina
@@ -236,32 +241,32 @@ fun random():Int{
 }
 //Función que calcula el ganador de la partida
 fun ganador(jugador:Int, maquina:Int):Int{
-    var ganador = 0
+    var ganadorFinal = 0
 
         when(jugador){
             1 -> when (maquina){
-                1-> ganador = 0 //Máquina = Piedra, empate :)
-                2-> ganador = 1 //Máquina = Papel, gana máquina
-                3-> ganador = 2 //Máquina = Tijeras, gana jugador
+                1-> ganadorFinal = 0 //Máquina = Piedra, empate :)
+                2-> ganadorFinal = 1 //Máquina = Papel, gana máquina
+                3-> ganadorFinal = 2 //Máquina = Tijeras, gana jugador
             }
             2 -> when (maquina){
-                1-> ganador = 1 //Máquina = Piedra, gana máquina
-                2-> ganador = 0 //Máquina = Papel, empate :)
-                3-> ganador = 2 //Máquina = Tijeras, gana jugador
+                1-> ganadorFinal = 1 //Máquina = Piedra, gana máquina
+                2-> ganadorFinal = 0 //Máquina = Papel, empate :)
+                3-> ganadorFinal = 2 //Máquina = Tijeras, gana jugador
             }
             3 -> when (maquina){
-                1-> ganador = 1 //Máquina = Piedra, gana máquina
-                2-> ganador = 2 //Máquina = Papel, gana jugador
-                3-> ganador = 0 //Máquina = Tijeras, empate :)
+                1-> ganadorFinal = 1 //Máquina = Piedra, gana máquina
+                2-> ganadorFinal = 2 //Máquina = Papel, gana jugador
+                3-> ganadorFinal = 0 //Máquina = Tijeras, empate :)
             }
         }
 
-    return ganador
+    return ganadorFinal
 }
 //texto que anuncia ganador
-fun ganadort(puntosJugador:Int, puntosMaquina:Int):String{
+fun ganadort(puntuacionJugador:Int, puntuacionMaquina:Int):String{
     var texto = ""
-    if (puntosJugador > puntosMaquina){
+    if (puntuacionJugador > puntuacionMaquina){
         texto = "el jugador"
     } else {
         texto = "la máquina"
