@@ -222,13 +222,13 @@ fun juego( modifier: Modifier = Modifier) {
                     //Si no llegan a 3 ptos siguen jugando
                     if (play(puntosJugador, puntosMaquina)) {
                         Text(
-                            text = "Máquina $puntosMaquina - $puntosJugador Jugador",
+                            text = "ptos máquina : $puntosMaquina - $puntosJugador ptos jugador",
                             fontSize = 30.sp
                         )
                     } else { //Si uno obtiene 3 ptos acaba el juego
                         Text(
-                            text = "Máquina $puntosMaquina - $puntosJugador Jugador " + "\n" +
-                                    "\n" + "El ganador es  $ganadort",
+                            text = "ptos máquina : $puntosMaquina - $puntosJugador ptos jugador " + "\n" +
+                                    "\n" + "El ganador es  $ganadort!",
                             fontSize = 30.sp
                         )
                     }
